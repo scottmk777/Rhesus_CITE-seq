@@ -11,21 +11,21 @@ library(ComplexHeatmap)
 set.seed(7)
 
 
-samp_info <- fread("/labs/khatrilab/scottmk/Cite-Seq/data/cell_information.csv")
+samp_info <- fread("~/data/cell_information.csv")
 
 ### ADT (Protein)
-adt_mat <- readMM("/labs/khatrilab/scottmk/Cite-Seq/data/ADT_Matrix.mtx")
-adt_rn <- fread("/labs/khatrilab/scottmk/Cite-Seq/data/features_ADTmat.tsv", header = F)
-adt_barcodes <- fread("/labs/khatrilab/scottmk/Cite-Seq/data/barcodes_ADTmat.tsv", header = F)
+adt_mat <- readMM("~/data/ADT_Matrix.mtx")
+adt_rn <- fread("~/data/features_ADTmat.tsv", header = F)
+adt_barcodes <- fread("~/data/barcodes_ADTmat.tsv", header = F)
 
 colnames(adt_mat) = adt_barcodes$V1
 rownames(adt_mat) = adt_rn$V1
 
 
 ### Gene Expr
-gene_mat <- readMM(file="/labs/khatrilab/scottmk/Cite-Seq/data/Gene_Matrix.mtx")
-gene_nms <- fread("/labs/khatrilab/scottmk/Cite-Seq/data/features_genemat.tsv", header = F)
-gene_barcodes <-  fread("/labs/khatrilab/scottmk/Cite-Seq/data/barcodes_genemat.tsv", header = F)
+gene_mat <- readMM(file="~/data/Gene_Matrix.mtx")
+gene_nms <- fread("~/data/features_genemat.tsv", header = F)
+gene_barcodes <-  fread("~/data/barcodes_genemat.tsv", header = F)
 
 gene_nms <- ifelse(gene_nms$V1 == "", "Unknown", gene_nms$V1)
 
@@ -54,7 +54,7 @@ srt <- FindClusters(object = srt, resolution = 0.2)
 srt <- RunTSNE(object = srt, dims = 1:7, method = "FIt-SNE", check_duplicates = FALSE)
 TSNEPlot(srt,label = TRUE)
 
-saveRDS(file = "/labs/khatrilab/scottmk/Cite-Seq/data/srt_aftertzzle.RDS", srt)
+saveRDS(file = "~/data/srt_aftertzzle.RDS", srt)
 
 
 # this tsne plot should be nearly identical to Figure 4c, but will be a little different
@@ -71,7 +71,7 @@ FeaturePlot(object = srt, features = c("ADT-CD11c", "ADT-CD8", "ADT-CD4" , "ADT-
 # identify markers between each cluster
 srt.markers <- FindAllMarkers(object = srt, assay = "RNA", only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)
 
-fwrite(file = "/labs/khatrilab/scottmk/Cite-Seq/csvs/forgit_srt_markers.csv", srt.markers)
+fwrite(file = "~/csvs/forgit_srt_markers.csv", srt.markers)
 
 # big heatmaps
 # Seurat can also do this for you
